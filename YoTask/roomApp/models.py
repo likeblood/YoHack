@@ -6,7 +6,8 @@ from lobbyApp.models import Lobby
 
 class Room(models.Model):
 	Lobby = models.ForeignKey(Lobby, on_delete=models.CASCADE)
-
+	users = models.ManyToManyField(User)
+	
 	room_name = models.CharField(max_length = 15)
 
 	def __str__(self):
