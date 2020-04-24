@@ -12,4 +12,5 @@ def about_issue(request):
 def todo(request):
 	return render(request, 'roomApp/todo.html')
 
-
+def new_issue(request):
+	return render(request, 'roomApp/newissue.html')

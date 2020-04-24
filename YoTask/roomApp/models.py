@@ -15,7 +15,8 @@ class Room(models.Model):
 
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    asignee = models.ForeignKey(User, on_delete=models.CASCADE)
+    
     task_title = models.CharField(max_length=40)
     task_description = models.TextField()
     date = models.DateTimeField()
