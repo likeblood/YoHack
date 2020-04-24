@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'roomApp',
     'lobbyApp',
+    'usersApp',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -112,6 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'usersApp.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
