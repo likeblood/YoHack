@@ -1,26 +1,15 @@
 from django.shortcuts import render
 
 
-''' tasks page '''
+'''  room page '''
 
-def tasks(request):
-	return render(request, 'roomApp/room.html')
+def issues(request):
+	return render(request, 'roomApp/issues.html')
 
-def tasks(request):
-	return render(request, 'roomApp/tasksClosed.html')
+def about_issue(request):
+	return render(request, 'roomApp/about_issue.html')
 
-def tasks(request):
-	return render(request, 'roomApp/tasksAll.html')
-
-
+def todo(request):
+	return render(request, 'roomApp/todo.html')
 
 
-
-''' To-Do user's page '''
-
-def tasks(request):
-	return render(request, 'roomApp/toDoList.html')
-
-
-def tasks(request):
-	return render(request, 'roomApp/Done.html')

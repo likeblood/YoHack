@@ -1,10 +1,10 @@
 from django.db import models
-# from lobbyApp.models import Lobby
+from lobbyApp.models import Lobby
 from usersApp.models import User
 
 
 class Room(models.Model):
-    # lobby = models.ForeignKey(Lobby, on_delete=models.CASCADE)
+    lobby = models.ForeignKey(Lobby, on_delete=models.CASCADE)
     users = models.ManyToManyField(User)
 
     room_name = models.CharField(max_length=15)
