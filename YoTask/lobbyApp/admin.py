@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Lobby
 
-# Register your models here.
+
+@admin.register(Lobby)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ['lobby_name']
