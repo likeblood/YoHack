@@ -18,4 +18,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    # url(r'^$', views.index, name='index'),      # maybe we'd  need this
+    url(r'^lobby/',  include('lobbyApp.urls')),   # lobby root (means koren`)
+    url(r'^rooms/', include('roomApp.urls')),     # rooms root (means koren`)
 ]

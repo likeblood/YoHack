@@ -1,13 +1,8 @@
 from django.conf.urls import url
-from . import views
-
 
 urlpatterns = [
-    url(r'^$', views.tasksActive, name='room'),
-    url(r'^$', views.tasksClosed, name='tasksClosed'),
-    url(r'^$', views.tasksAll, name='tasksAll'),
-
-
-    url(r'^$', views.toDoList, name='toDoList'),
-    url(r'^$', views.Done, name='Done'),
+    url(r'^$',  views.rooms, name='rooms'),                                 # all rooms
+    url(r'^(\d+)/issues/$', views.issues, name='issues'),                   # room issues
+    url(r'^(\d+)/issues/(\d+)/$', views.about_issue, name='about_issue'),   # about issue
+    url(r'^(\d+)/todo/$', views.todo, name='todo'),                         # user's todo
 ]
