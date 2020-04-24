@@ -114,6 +114,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'usersApp.User'
+# ACCOUNT_AUTHENTICATION_METHOD = "username"
+
+LOGIN_REDIRECT_URL = '/admin/'
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
