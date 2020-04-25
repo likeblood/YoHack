@@ -4,8 +4,10 @@ from usersApp.models import User
 
 class Room(models.Model):
     users = models.ManyToManyField(User)
+    tasks = models.ManyToManyField(Task)
 
-    room_name = models.CharField(max_length=15)
+    room_name = models.CharField(max_length=30)
+    room_description = models.TextField()
 
     def __str__(self):
         return self.room_name
@@ -18,6 +20,7 @@ class Lobby(models.Model):
 
     lobby_name = models.CharField(max_length=30)
     lobby_description = models.TextField()
+    lobby_password = models.IntegerField()
 
 
 class Task(models.Model):
