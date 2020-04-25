@@ -71,7 +71,7 @@ def create_room(request, lobby_id):
 
     lobby = Lobby.objects.filter(id=lobby_id).all()
     if request.method == "POST":
-        if request.POST.get('room_name') and request.POST.get('room_description')
+        if request.POST.get('room_name') and request.POST.get('room_description')\
         and is_private.POST.get('is_private'):
             room_name = request.POST['room_name']
             room_description = request.POST['room_description']
@@ -190,38 +190,14 @@ def create_issue(request, lobby_id, room_id):
 
 def about_issue(request, issue_id):
     issue = Task.objects.filter(id=issue_id)
-    context = 
-    {
+    context = {
         'author': issue.author,
         'asignee': issue.asignee,
         'title': issue.task_title,
-        'description': issue.task_description
+        'description': issue.task_description,
         'date': issue.date
     }
 
     render(request, "YoTask/about_issue.html", context)
 
 
-
-# ''' tasks page '''
-#
-# def tasks(request):
-#     return render(request, 'roomApp/room.html')
-#
-#
-# def tasks(request):
-#     return render(request, 'roomApp/tasksClosed.html')
-#
-#
-# def tasks(request):
-#     return render(request, 'roomApp/tasksAll.html')
-#
-#
-# ''' To-Do user's page '''
-#
-# def tasks(request):
-#     return render(request, 'roomApp/toDoList.html')
-#
-#
-# def tasks(request):
-#     return render(request, 'roomApp/Done.html')
