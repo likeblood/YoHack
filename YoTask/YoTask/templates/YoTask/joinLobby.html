@@ -1,0 +1,56 @@
+{% extends "YoTask/wrapper.html" %}
+
+{% block content %}
+{% load static %}
+
+<!-- Modal -->
+<div class="modal modal" id="joinLobbyModal" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"  role="document">
+        <div class="modal-content p-4" style="background-color: #2C2F33;" >
+            <div class="mb-5">
+                <input class="form-control-lg mb-3" style="width: 100%;" type="password" placeholder="Введите пин от лобби">
+                <button type="button" class=" button p-2 text-center" style="background-color: #6c63ff; width: 100%; font-size: 16px">
+                    Войти в лобби
+                </button>
+            </div>
+            <img src="{% static 'pics/work.svg' %}"  style="opacity: 0.7;" width="100%">
+        </div>
+    </div>
+
+</div>
+
+<div class="modal modal" id="createLobbyModal" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"  role="document">
+        <div class="modal-content p-4" style="background-color: #2C2F33;" >
+            <div class="mb-5">
+                <input class="form-control-lg mb-3" style="width: 100%;" type="text" placeholder="Введите название нового лобби">
+                <button type="button" class="button p-2 text-center" style="background-color: #0fb366; width: 100%; font-size: 16px">
+                    Создать лобби
+                </button>
+            </div>
+            <img src="{% static 'pics/night.svg' %}"  style="opacity: 0.7;" width="100%">
+        </div>
+    </div>
+
+</div>
+<div style="height: 100%; background-image: url('../../static/pics/bg.svg'); ">
+    <div class="container mx-auto" style="max-width: 1240px; height: 100%;">
+        <div class="d-flex "  style="height: 100%" >
+            <img src="{% static 'pics/todo2.svg' %}" class="my-auto mr-3" style="opacity:1" width="auto" height="70%">
+            <div class="my-auto ml-5">
+                <div>
+                    <button type="button" class=" button p-3 text-center" style="background-color: #6c63ff; width: 300px"  data-toggle="modal" data-target="#joinLobbyModal">
+                        Войти в лобби
+                    </button>
+                </div>
+                <div class="text-center my-3" style="color: #99AAB5; font-size: 18px">или</div>
+                <div>
+                    <button type="button" class="button p-3 text-center" style="background-color: #0fb366; width: 300px " data-toggle="modal" data-target="#createLobbyModal">
+                        Создать лобби
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

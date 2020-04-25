@@ -99,7 +99,10 @@ def join_lobby(request):
 			except:
 				return HttpResponse('<h3>Неправильный пароль</h3>')
 		return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
-#
+	else:
+		return render(request, 'YoTask/joinLobby.html', {"error": "Мы не нашли лобби с таким пином :("})
+
+
 # ''' tasks page '''
 #
 # def tasks(request):
