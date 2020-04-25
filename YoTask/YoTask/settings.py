@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from pathlib import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+home_dir = Path.home()
 
 
 # Quick-start development settings - unsuitable for production
@@ -119,8 +121,16 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'usersApp.User'
+# ACCOUNT_SIGNUP_FORM_CLASS = 'usersApp.forms.CustomSignupForm'
 # ACCOUNT_AUTHENTICATION_METHOD = "username"
 
+ACCOUNT_FORMS = {
+    'signup': 'usersApp.forms.CustomSignupForm',
+}
+
+ACCOUNT_USER_MODEL_EMAIL_FIELD = None
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 LOGIN_REDIRECT_URL = '/lobby/'
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
