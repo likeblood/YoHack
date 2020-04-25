@@ -31,8 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'roomApp',
-    'lobbyApp',
+    'YoTask',
     'usersApp',
 
     'django.contrib.admin',
@@ -73,6 +72,12 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+    },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [
+            '/home/html/jinja2',
+        ],
     },
 ]
 
@@ -116,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'usersApp.User'
 # ACCOUNT_AUTHENTICATION_METHOD = "username"
 
-LOGIN_REDIRECT_URL = '/admin/'
+LOGIN_REDIRECT_URL = '/lobby/'
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 
@@ -140,3 +145,4 @@ USE_TZ = True
 SITE_ID = 1
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

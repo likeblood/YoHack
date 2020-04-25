@@ -21,9 +21,13 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^lobby/',  include('lobbyApp.urls')),   # lobby root (means koren`) ya ponyal
-    url(r'^rooms/', include('roomApp.urls')),     # rooms root (means koren`)
-
     url(r'^accounts/', include('allauth.urls')),
     url(r'^$', views.index, name='index'),
+
+    url(r'^lobby/$', views.join_lobby, name='join_lobby'),  # page with lobby login and lobby creating
+    # url(r'^lobby/(\d+)/$', views.lobby, name='lobby'),              # lobby
+
+    # url(r'^room/(\d+)/issues/$', views.issues, name='issues'),                   # room issues
+    # url(r'^room/(\d+)/issues/(\d+)/$', views.about_issue, name='about_issue'),   # about issue
+    # url(r'^room/(\d+)/todo/$', views.todo, name='todo'),                         # user's todo
 ]

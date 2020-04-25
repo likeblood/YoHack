@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Лобби</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href='{% static "css/style.css" %}'>
+
+</head>
+<body>
+
+<header>
+    {% include 'YoTask/include/header.html' %}
+</header>
+
+<main class="">
+    <div class="container py-5 px-4 " id="content_block" >
+            <div class="p-0 pl-5" id="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+    </div>
+</main>
+
+
+<script src='{% static "js/bootstrap.js" %}'></script>
+<script src='{% static "js/script.js" %}'></script>
+
+</body>
+</html>
