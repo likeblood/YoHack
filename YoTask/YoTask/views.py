@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 
 import datetime
+import random 
 
 ''' registration '''
 def index(request):

@@ -21,7 +21,7 @@ class Room(models.Model):
     room_name = models.CharField(max_length=30)
     room_description = models.TextField()
     is_private = models.BooleanField()
-    room_password = models.IntegerField()
+    room_password = models.TextField()
 
     def __str__(self):
         return self.room_name
@@ -33,7 +33,7 @@ class Lobby(models.Model):
     rooms = models.ManyToManyField(Room)
 
     lobby_name = models.CharField(max_length=30)
-    lobby_password = models.IntegerField()
+    lobby_password = models.TextField()
 
     def __str__(self):
         return self.lobby_name
