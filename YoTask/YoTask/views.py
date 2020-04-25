@@ -53,7 +53,7 @@ def create_room(request, lobby_id):
 	lobby.save()
 
 	contex = {
-		'rooms' : [],
+		'tasks' : [],
 		'users' : [],
 		'user_id' : request.user.id
 		}
@@ -82,11 +82,22 @@ def create_issue(request, lobby_id, room_id):
 	room.save()
 	issue.save()
 
+	contex = {
+		'tasks' : room.tasks,
+		'users' : room.users,
+		'user_id' : request.user.id
+	}
+
+	render(request, "YoTask/room.html", contex)
+
 def join_lobby(request):
 	if request.method == "POST":
 		if request.POST.get('join_lobby'):
 			pin = request.POST['PIN']
-			lobby_id = Lobby.objects.filter(lobby_password=lobby_id).id
+			try:
+				lobby_id = Lobby.objects.filter(lobby_password=lobby_id).id
+			except:
+				return HttpResponse('<h3>Неправильный пароль</h3>')
 		return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
 #
 # ''' tasks page '''
