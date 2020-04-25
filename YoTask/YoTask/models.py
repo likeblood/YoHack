@@ -4,7 +4,8 @@ from usersApp.models import User
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
     asignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="asignee")
-    
+
+    room_id = models.IntegerField()
     task_title = models.CharField(max_length=40)
     task_description = models.TextField()
     date = models.DateTimeField()
@@ -28,7 +29,6 @@ class Lobby(models.Model):
     rooms = models.ManyToManyField(Room)
 
     lobby_name = models.CharField(max_length=30)
-    lobby_description = models.TextField()
     lobby_password = models.IntegerField()
 
     def __str__(self):

@@ -13,7 +13,7 @@ def index(request):
     else:
         return HttpResponseRedirect('accounts/login/')
 
-
+''' menu '''
 def create_lobby(request):
     try:
         max_lobby_password = int(Lobby.objects.order_by("-lobby_password").first()['lobby_password'])
@@ -31,16 +31,32 @@ def create_lobby(request):
             )
         lobby.save()
 
-    contex = {
+    context = {
         'rooms': [],
         'users': [],
         'user_id': request.user.id
     }
-    return render(request, "YoTask/lobby.html", contex)
+    return render(request, "YoTask/lobby.html", context)
 
 
+@csrf_exempt
+def join_lobby(request):
+    if request.method == "POST":
+        if request.POST.get('pin'):
+            pin = request.POST.get('pin')
+            try:
+                lobby_id = Lobby.objects.filter(lobby_password=pin).id
+            except:
+                return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
+                              {"error": "Мы не нашли лобби с таким пином"})
+
+        return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
+    return render(request, "YoTask/joinLobby.html")
+
+
+''' in-lobby '''
 def create_room(request, lobby_id):
-    lobby = Lobby.objects.filter(id=lobby_id)
+    lobby = Lobby.objects.filter(id=lobby_id).all()
     if request.method == "POST":
         if request.POST.get('room_name') and request.POST.get('room_description'):
             room_name = request.POST['room_name']
@@ -54,18 +70,53 @@ def create_room(request, lobby_id):
     room.save()
     lobby.save()
 
-    contex = {
+    context = {
         'tasks': [],
         'users': [],
         'user_id': request.user.id
     }
 
-    return render(request, "YoTask/room.html", contex)
+    return render(request, "YoTask/room.html", context)
+
+
+def lobby(request, lobby_id):
+    lobby = Lobby.objects.filter(id=lobby_id).all()
+    if lobby.creator.id == request.user.id:
+        rooms = lobby.filter(id=lobby_id).rooms
+    else:
+        rooms = Room.objects.filter(users.id=request.user.id)
+
+    context = {
+        'rooms': rooms,
+        'users': lobby.users,
+        'user_id': request.user.id
+    }
+
+    return render(request, "YoTask/lobby.html", context)
+
+
+@csrf_exempt
+def join_room(request, room_id):
+        return HttpResponseRedirect('/room/{}/'.format(room_id))
+
+
+
+''' in-room '''
+def issues(request, room_id):
+    room = lobby.objects.filter(id=room_id).all()
+    tasks = Task.objects.filter(room_id=room_id).order_by('date')
+    context = {
+        'tasks': tasks,
+        'users': room.users,
+        'user_id': request.user.id
+    }
+
+    render(request, "YoTask/room.html", context)
 
 
 def create_issue(request, lobby_id, room_id):
-    lobby = Lobby.objects.filter(id=lobby_id)
-    room = lobby.objects.filter(id=room_id)
+    lobby = Lobby.objects.filter(id=lobby_id).all()
+    room = lobby.objects.filter(id=room_id).all()
     if request.method == "POST":
         if request.POST.get('asignee') and request.POST.get('task_title') \
                 and request.POST.get('task_description'):
@@ -86,28 +137,29 @@ def create_issue(request, lobby_id, room_id):
     room.save()
     issue.save()
 
-    contex = {
+    context = {
         'tasks': room.tasks,
         'users': room.users,
         'user_id': request.user.id
     }
 
-    render(request, "YoTask/room.html", contex)
+    render(request, "YoTask/room.html", context)
 
 
-@csrf_exempt
-def join_lobby(request):
-    if request.method == "POST":
-        if request.POST.get('pin'):
-            pin = request.POST.get('pin')
-            try:
-                lobby_id = Lobby.objects.filter(lobby_password=pin).id
-            except:
-                return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
-                              {"error": "Мы не нашли лобби с таким пином"})
+def about_issue(request, issue_id):
+    issue = Task.objects.filter(id=issue_id)
+    context = 
+    {
+        'author': issue.author,
+        'asignee': issue.asignee,
+        'title': issue.task_title,
+        'description': issue.task_description
+        'date': issue.date
+    }
 
-        return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
-    return render(request, "YoTask/joinLobby.html")
+    render(request, "YoTask/about_issue.html", context)
+
+
 
 # ''' tasks page '''
 #
