@@ -5,17 +5,57 @@
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
 
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+<div class="container mx-auto" style="max-width: 1240px; height: 100%;">
+    <div class="d-flex"  style="height: 100%" >
+        <div class="my-auto ml-auto mr-5 p-4" style="background-color: #23272A; color: #e7e7e7; min-width: 300px">
+            <h2 class="text-center">Регистрация</h2>
+            <p class="text-center">Уже есть аккаунт? <a href="{{ login_url }}">Войти</a></p>
+            <form class="signup" style="font-size: 15px" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                <div class="errorText">{{ form.errors }}</div>
+                <div class="mb-3">
+                    <div >{{ form.username.label }}</div>
+                    {{ form.username }}
+                </div>
+                <div  class="mb-3">
+                    <div >{{ form.telegram.label }}</div>
+                    {{ form.telegram }}
+                </div>
+                <div  class="mb-3">
+                    <div >{{ form.password1.label }}</div>
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+                    {{ form.password1 }}
+                </div>
+                <div  class="mb-4">
+                    <div >{{ form.password2.label }}</div>
+
+                    {{ form.password2 }}
+                </div>
+
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                <div class="text-center">
+                    <button type="submit" class="button p-1 text-center" style="font-size: 16px; background-color: #0fb366; width: 50% ">
+                        Продолжить
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% load static %}
+        <img src="{% static 'pics/plane.svg' %}" class="my-auto ml-5" style="opacity:0.7"width="auto" height="65%" >
+    </div>
+    <script>
+        $('#id_username')[0].classList.add('form-control-sm')
+        $('#id_username').css("width", "100%");
+        $('#id_telegram')[0].classList.add('form-control-sm')
+        $('#id_telegram').css("width", "100%");
+        $('#id_password1')[0].classList.add('form-control-sm')
+        $('#id_password1').css("width", "100%");
+        $('#id_password2')[0].classList.add('form-control-sm')
+        $('#id_password2').css("width", "100%");
+    </script>
+</div>
 
 {% endblock %}

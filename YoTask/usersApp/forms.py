@@ -8,11 +8,11 @@ class CustomSignupForm(SignupForm):
                                required=False,
                                label='Telegram',
                                widget=forms.TextInput(attrs={
-                                   'placeholder': 'username',
-                                   'class': 'form-control'
+                                   'placeholder': '@username',
+                                   'class': ''
                                }),
                                validators=[
-                                   RegexValidator('^[\.\_a-zA-Z0-9]+$', message="Неправильный Telegram ID.")])
+                                   RegexValidator('^@[\.\_a-zA-Z0-9]+$', message="Неправильный Telegram ID.")])
 
     def save(self, request):
         user = super(CustomSignupForm, self).save(request)

@@ -35,6 +35,9 @@
         <div class="d-flex "  style="height: 100%" >
             <img src="{% static 'pics/todo2.svg' %}" class="my-auto mr-3" style="opacity:1" width="auto" height="70%">
             <div class="my-auto ml-5">
+                <h1 style="color: #e7e7e7" class="mb-5">
+                    Привет, {{user.username}}!
+                </h1>
                 <div>
                     <button type="button" class=" button p-3 text-center" style="background-color: #6c63ff; width: 300px"  data-toggle="modal" data-target="#joinLobbyModal">
                         Войти в лобби
