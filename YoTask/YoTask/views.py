@@ -31,12 +31,12 @@ def join_lobby(request):
         elif request.POST.get('lobby_name'):
 
             try:
-                max_lobby_password = int(Lobby.objects.order_by("lobby_password").first()['lobby_password'])
+                max_lobby_password = int(Lobby.objects.order_by("-lobby_password")[0].lobby_password)
             except:
-                max_lobby_password = 0
+                max_lobby_password = 999
 
             lobby_name = request.POST['lobby_name']
-            lobby_password = [i for i in range(1000, 10000)][max_lobby_password + 1]
+            lobby_password = max_lobby_password + 1
 
             lobby = Lobby(
                 creater=request.user,
