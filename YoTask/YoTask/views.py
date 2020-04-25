@@ -6,14 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 
-
+''' registration '''
 def index(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('lobby/')
     else:
         return HttpResponseRedirect('accounts/login/')
 
+
 ''' menu '''
+@csrf_exempt
 def create_lobby(request):
     try:
         max_lobby_password = int(Lobby.objects.order_by("-lobby_password").first()['lobby_password'])
@@ -55,6 +57,7 @@ def join_lobby(request):
 
 
 ''' in-lobby '''
+@csrf_exempt
 def create_room(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
     if request.method == "POST":
@@ -114,6 +117,7 @@ def issues(request, room_id):
     render(request, "YoTask/room.html", context)
 
 
+@csrf_exempt
 def create_issue(request, lobby_id, room_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
     room = lobby.objects.filter(id=room_id).all()
