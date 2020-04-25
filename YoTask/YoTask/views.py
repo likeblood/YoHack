@@ -15,32 +15,33 @@ def index(request):
 
 
 ''' menu '''
-@csrf_exempt
-def create_lobby(request):
-    try:
-        max_lobby_password = int(Lobby.objects.order_by("-lobby_password").first()['lobby_password'])
-    except:
-        max_lobby_password = 0
+# @csrf_exempt
+# def create_lobby(request):
+#     try:
+#         max_lobby_password = int(Lobby.objects.order_by("-lobby_password").first()['lobby_password'])
+#     except:
+#         max_lobby_password = 0
 
-    if request.method == "POST":
-        if request.POST.get('lobby_name'):
-            lobby_name = request.POST['lobby_name']
-            lobby_password = [i for i in range(10000)][max_lobby_password + 1]
-            lobby = Lobby(
-                creater=request.user,
-                lobby_name=lobby_name,
-                lobby_password=lobby_password,
-            )
-        lobby.save()
-        lobby.add(request.user)
-        lobby.save()
+#     if request.method == "POST":
+#         if request.POST.get('lobby_name'):
+#             lobby_name = request.POST['lobby_name']
+#             lobby_password = [i for i in range(10000)][max_lobby_password + 1]
+#             lobby = Lobby(
+#                 creater=request.user,
+#                 lobby_name=lobby_name,
+#                 lobby_password=lobby_password,
+#             )
+#         lobby.save()
+#         lobby.add(request.user)
+#         lobby.save()
 
-    context = {
-        'rooms': [],
-        'users': lobby.users,
-        'user_id': request.user.id
-    }
-    return HttpResponseRedirect('/lobby/{}/'.format(lobby_id), context)
+#     context = {
+#         'rooms': [],
+#         'users': lobby.users,
+#         'user_id': request.user.id
+#     }
+
+#     return HttpResponseRedirect('/lobby/{}/'.format(lobby_id), context)
 
 
 @csrf_exempt
@@ -56,7 +57,32 @@ def join_lobby(request, lobby_id):
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
+        elif request.POST.get('lobby_name'):
 
+            try:
+                max_lobby_password = int(Lobby.objects.order_by("-lobby_password").first()['lobby_password'])
+            except:
+                max_lobby_password = 0
+
+                lobby_name = request.POST['lobby_name']
+                lobby_password = [i for i in range(10000)][max_lobby_password + 1]
+
+                lobby = Lobby(
+                    creater=request.user,
+                    lobby_name=lobby_name,
+                    lobby_password=lobby_password,
+                )
+
+                lobby.save()
+                lobby.add(request.user)
+                lobby.save()
+
+            context = {
+                'rooms': [],
+                'users': lobby.users,
+                'user_id': request.user.id
+            }
+            
         return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
     return render(request, "YoTask/joinLobby.html")
 
