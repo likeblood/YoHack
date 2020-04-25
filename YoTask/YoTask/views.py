@@ -40,7 +40,7 @@ def create_lobby(request):
         'users': lobby.users,
         'user_id': request.user.id
     }
-    return render(request, "YoTask/lobby.html", context)
+    return HttpResponseRedirect('/lobby/{}/'.format(lobby_id), context)
 
 
 @csrf_exempt
