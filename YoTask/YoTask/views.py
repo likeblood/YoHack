@@ -42,12 +42,15 @@ def create_lobby(request):
 
 
 @csrf_exempt
-def join_lobby(request):
+def join_lobby(request, lobby_id):
+    lobby = Lobby.objects.filter(id=lobby_id).all()
     if request.method == "POST":
         if request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
                 lobby_id = Lobby.objects.filter(lobby_password=pin).id
+                lobby.add(request.user)
+                lobby.save()
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
@@ -70,6 +73,7 @@ def create_room(request, lobby_id):
                 room_description=room_description
             )
             lobby.rooms.add(room)
+    room.add(request.user)
     room.save()
     lobby.save()
 
@@ -100,6 +104,9 @@ def lobby(request, lobby_id):
 
 @csrf_exempt
 def join_room(request, room_id):
+        room = lobby.objects.filter(id=room_id).all()
+        room.add(request.user)
+        room.save()
         return HttpResponseRedirect('/room/{}/'.format(room_id))
 
 
