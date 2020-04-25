@@ -31,12 +31,12 @@ def join_lobby(request):
         elif request.POST.get('lobby_name'):
 
             try:
-                max_lobby_password = int(Lobby.objects.order_by("-lobby_password").first()['lobby_password'])
+                max_lobby_password = int(Lobby.objects.order_by("lobby_password").first()['lobby_password'])
             except:
                 max_lobby_password = 0
 
             lobby_name = request.POST['lobby_name']
-            lobby_password = [i for i in range(10000)][max_lobby_password + 1]
+            lobby_password = [i for i in range(1000, 10000)][max_lobby_password + 1]
 
             lobby = Lobby(
                 creater=request.user,
@@ -62,7 +62,7 @@ def join_lobby(request):
 @csrf_exempt
 def create_room(request, lobby_id):
     try:
-        max_room_password = int(Room.objects.order_by("-room_password").first()['room_password'])
+        max_room_password = int(Room.objects.order_by("room_password").first()['room_password'])
     except:
         max_room_password = 0
 
@@ -75,7 +75,7 @@ def create_room(request, lobby_id):
             is_private = is_private.POST['is_private']
 
             if (is_private):
-                room_password = [i for i in range(10000)][max_room_password + 1]
+                room_password = [i for i in range(1000, 10000)][max_room_password + 1]
             else:
                 room_password = None
 
