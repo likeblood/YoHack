@@ -35,18 +35,18 @@ def join_lobby(request):
             except:
                 max_lobby_password = 0
 
-                lobby_name = request.POST['lobby_name']
-                lobby_password = [i for i in range(10000)][max_lobby_password + 1]
+            lobby_name = request.POST['lobby_name']
+            lobby_password = [i for i in range(10000)][max_lobby_password + 1]
 
-                lobby = Lobby(
-                    creater=request.user,
-                    lobby_name=lobby_name,
-                    lobby_password=lobby_password,
-                )
+            lobby = Lobby(
+                creater=request.user,
+                lobby_name=lobby_name,
+                lobby_password=lobby_password,
+            )
 
-                lobby.save()
-                lobby.users.add(request.user)
-                lobby.save()
+            lobby.save()
+            lobby.users.add(request.user)
+            lobby.save()
 
             context = {
                 'rooms': [],
