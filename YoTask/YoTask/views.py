@@ -45,14 +45,13 @@ def index(request):
 
 
 @csrf_exempt
-def join_lobby(request, lobby_id):
-    lobby = Lobby.objects.filter(id=lobby_id).all()
+def join_lobby(request):
     if request.method == "POST":
         if request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
-                lobby_id = Lobby.objects.filter(lobby_password=pin).id
-                lobby.add(request.user)
+                lobby = Lobby.objects.filter(lobby_password=pin).all()
+                lobby.users.add(request.user)
                 lobby.save()
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
@@ -74,7 +73,7 @@ def join_lobby(request, lobby_id):
                 )
 
                 lobby.save()
-                lobby.add(request.user)
+                lobby.users.add(request.user)
                 lobby.save()
 
             context = {
@@ -82,8 +81,8 @@ def join_lobby(request, lobby_id):
                 'users': lobby.users,
                 'user_id': request.user.id
             }
-            
-        return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
+
+        return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
     return render(request, "YoTask/joinLobby.html")
 
 
