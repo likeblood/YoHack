@@ -21,6 +21,7 @@ class Room(models.Model):
     room_name = models.CharField(max_length=30)
     room_description = models.TextField()
     is_private = models.BooleanField()
+    room_password = models.IntegerField()
 
     def __str__(self):
         return self.room_name
