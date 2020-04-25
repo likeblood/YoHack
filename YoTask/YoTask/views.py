@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from YoTask.models import Lobby, Room, Task
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
@@ -23,7 +23,8 @@ def join_lobby(request):
         if request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
-                lobby = Lobby.objects.filter(lobby_password=pin).all()
+                lobby_id = Lobby.objects.filter(lobby_password=pin).id
+                lobby = Lobby.objects.filter(id=lobby_id).all()
                 lobby.users.add(request.user)
                 lobby.save()
             except:
@@ -64,11 +65,11 @@ def join_lobby(request):
 ''' in-lobby '''
 def lobby(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
-    rooms = Room.objects.filter(not(is_private))
+    rooms = Room.objects.filter(is_private=False)
 
     context = {
         'rooms': rooms,
-        'users': lobby.users,
+        'users': lobby[0].users,
         'user_id': request.user.id
     }
 
