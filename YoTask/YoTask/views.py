@@ -37,7 +37,7 @@ def create_lobby(request):
 			}
 	return render(request, "YoTask/lobby.html", contex)
   
-def crate_room(request, lobby_id):
+def create_room(request, lobby_id):
 	lobby = Lobby.objects.filter(id=lobby_id)
 	if request.method == "POST":
 		if request.POST.get('crate_room'):
