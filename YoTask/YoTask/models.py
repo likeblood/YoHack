@@ -1,6 +1,15 @@
 from django.db import models
 from usersApp.models import User
 
+class Task(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
+    asignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="asignee")
+    
+    task_title = models.CharField(max_length=40)
+    task_description = models.TextField()
+    date = models.DateTimeField()
+    is_done = models.BooleanField()
+
 
 class Room(models.Model):
     users = models.ManyToManyField(User)
@@ -22,12 +31,6 @@ class Lobby(models.Model):
     lobby_description = models.TextField()
     lobby_password = models.IntegerField()
 
+    def __str__(self):
+        return self.lobby_name
 
-class Task(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
-    asignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="asignee")
-    
-    task_title = models.CharField(max_length=40)
-    task_description = models.TextField()
-    date = models.DateTimeField()
-    is_done = models.BooleanField()

@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from models import Lobby, Room, Task
+from YoTask.models import Lobby, Room, Task
 
 import datetime
 
@@ -82,6 +82,12 @@ def create_issue(request, lobby_id, room_id):
 	room.save()
 	issue.save()
 
+def join_lobby(request):
+	if request.method == "POST":
+		if request.POST.get('join_lobby'):
+			pin = request.POST['PIN']
+			lobby_id = Lobby.objects.filter(lobby_password=lobby_id).id
+		return HttpResponseRedirect('/lobby/{}/'.format(lobby_id))
 #
 # ''' tasks page '''
 #
