@@ -28,6 +28,8 @@ def join_lobby(request):
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
+            return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
+
         elif request.POST.get('lobby_name'):
 
             try:
@@ -54,55 +56,11 @@ def join_lobby(request):
                 'user_id': request.user.id
             }
 
-        return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
-    return render(request, "YoTask/joinLobby.html")
+            return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
+    #return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
 
 
 ''' in-lobby '''
-@csrf_exempt
-def create_room(request, lobby_id):
-    try:
-        max_room_password = int(Room.objects.order_by("room_password").first()['room_password'])
-    except:
-        max_room_password = 0
-
-    lobby = Lobby.objects.filter(id=lobby_id).all()
-    if request.method == "POST":
-        if request.POST.get('room_name') and request.POST.get('room_description')\
-        and request.POST.get('is_private'):
-            room_name = request.POST['room_name']
-            room_description = request.POST['room_description']
-            is_private = is_private.POST['is_private']
-
-            if (is_private):
-                room_password = [i for i in range(1000, 10000)][max_room_password + 1]
-            else:
-                room_password = None
-
-            room = Room(
-                creater=request.user,
-                room_name=room_name,
-                room_description=room_description,
-                is_private=is_private,
-                room_password=room_password
-            )
-
-            
-            room.save()
-            room.users.add(request.user)
-            lobby.rooms.add(room)
-            room.save()
-            lobby.save()
-
-    context = {
-        'tasks': [],
-        'users': room.users,
-        'user_id': request.user.id
-    }
-
-    return render(request, "YoTask/room.html", context)
-
-
 def lobby(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
     rooms = Room.objects.filter(not(is_private))
@@ -117,25 +75,23 @@ def lobby(request, lobby_id):
 
 
 @csrf_exempt
-def join_room(request, room_id):
-        room = lobby.objects.filter(id=room_id).all()
-        if (room.is_private):
-            if request.method == "POST":
-                if request.POST.get('pin'):
-                    pin = request.POST.get('pin')
-                    try:
-                        room_id = Room.objects.filter(room_password=pin).id
-                        room.add(request.user)
-                        room.save()
-                        return HttpResponseRedirect('/room/{}/'.format(room_id))
-                    except:
-                        return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
-                                      {"error": "Мы не нашли комнату с таким пином"})
+def join_room(request):
+        if request.method == "POST":
+            if request.POST.get('pin'):
+                pin = request.POST.get('pin')
+                try:
+                    room_id = Room.objects.filter(room_password=pin).id
+                    room.add(request.user)
+                    room.save()
+                    return HttpResponseRedirect('/room/{}/'.format(room_id))
+                except:
+                    return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
+                                  {"error": "Мы не нашли комнату с таким пином"})
 
-        else:
-            room.add(request.user)
-            room.save()
-            return HttpResponseRedirect('/room/{}/'.format(room_id))
+            else:
+                room.add(request.user)
+                room.save()
+                return HttpResponseRedirect('/room/{}/'.format(room_id))
 
 
 
