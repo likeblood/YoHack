@@ -27,12 +27,13 @@ def create_lobby(request):
             lobby_name = request.POST['lobby_name']
             lobby_password = [i for i in range(10000)][max_lobby_password + 1]
             lobby = Lobby(
-                creator=request.user.id,
+                creater=request.user.id,
                 lobby_name=lobby_name,
                 lobby_password=lobby_password,
             )
         lobby.save()
-
+        lobby.add(request.user)
+        lobby.save()
     context = {
         'rooms': [],
         'users': [],
@@ -64,13 +65,16 @@ def join_lobby(request, lobby_id):
 def create_room(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
     if request.method == "POST":
-        if request.POST.get('room_name') and request.POST.get('room_description'):
+        if request.POST.get('room_name') and request.POST.get('room_description')
+        and is_private.POST.get('is_private'):
             room_name = request.POST['room_name']
             room_description = request.POST['room_description']
-
+            is_private = is_private.POST['is_private']
             room = Room(
+                creater=request.user,
                 room_name=room_name,
-                room_description=room_description
+                room_description=room_description,
+                is_private=is_private
             )
             lobby.rooms.add(room)
     room.add(request.user)
@@ -88,11 +92,7 @@ def create_room(request, lobby_id):
 
 def lobby(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
-    if lobby.creator.id == request.user.id:
-        rooms = lobby.filter(id=lobby_id).rooms
-    else:
-        rooms = Room.objects.filter(users.id=request.user.id)
-
+    rooms = Room.objects.filter(not(is_private))
     context = {
         'rooms': rooms,
         'users': lobby.users,

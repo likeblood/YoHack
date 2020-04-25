@@ -13,18 +13,21 @@ class Task(models.Model):
 
 
 class Room(models.Model):
+    creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="room_creator")
+
     users = models.ManyToManyField(User)
     tasks = models.ManyToManyField(Task)
 
     room_name = models.CharField(max_length=30)
     room_description = models.TextField()
+    is_private = models.BooleanField()
 
     def __str__(self):
         return self.room_name
 
 
 class Lobby(models.Model):
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lobby_creator")
+    creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lobby_creator")
     users = models.ManyToManyField(User, related_name="lobby_users")
     rooms = models.ManyToManyField(Room)
 
