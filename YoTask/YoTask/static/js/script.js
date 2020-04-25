@@ -12,3 +12,17 @@ function joinLobby() {
         });
     }
 }
+
+function createLobby() {
+    if($('#createLobbyInput').val()){
+        $.ajax({
+            type: 'POST',
+            url: '',
+            data: { 'lobby_name': $('#createLobbyInput').val(), },
+            success: function (res) {
+
+            }
+
+        });
+    }
+}
