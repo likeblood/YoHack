@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
 
     url(r'^lobby/$', views.join_lobby, name='join_lobby'),  # page with lobby login and lobby creating
-    # url(r'^lobby/(\d+)/$', views.lobby, name='lobby'),              # lobby
+    url(r'^lobby/(\d+)/$', views.lobby, name='lobby'),              # lobby
 
     # url(r'^room/(\d+)/issues/$', views.issues, name='issues'),                   # room issues
     # url(r'^room/(\d+)/issues/(\d+)/$', views.about_issue, name='about_issue'),   # about issue
