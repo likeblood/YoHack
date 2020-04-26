@@ -1,10 +1,17 @@
 <div>
     <nav class="navbar navbar-dark p-0" style="background-color: #23272A; height: 40px" >
-        <div class="mx-auto">
-
-        <span class="navbar-brand mr-1" style="color: #e7e7e7;">YoTask</span>
-
+        <div>
+            <ul class="nav nav-pills">
+                <button type="button" style="color: #dc3545;" class="btn btn-link" onclick=" relocate_exit()">Выйти</button>
+                <script>
+                function relocate_exit()
+                {
+                     location.href = "/accounts/logout/";
+                }
+                </script>
+        </div>
+        <div class="mx-auto" >
+            <span class="navbar-brand mr-1" style="color: #e7e7e7; margin-left: -45%">YoTask</span>
         </div>
     </nav>
-
 </div>
