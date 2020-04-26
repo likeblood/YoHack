@@ -99,7 +99,7 @@ def join_lobby(request):
 @csrf_exempt
 def lobby(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
-    rooms = Room.objects.all()
+    rooms = lobby[0].rooms
 
     if request.method == "POST":
         # create room
@@ -130,19 +130,19 @@ def lobby(request, lobby_id):
             else:
                 is_private = False
 
-            print(is_private)
 
             room = Room(
                         creater=request.user,
                         is_private=is_private,
                         room_name=room_name,
                         room_description=room_description,
-                        room_password=room_password
+                        room_password=room_password,
                         )
             room.save()
             room.users.add(request.user)
             room.save()
-
+            lobby[0].rooms.add(room)
+            lobby.save()
             ''' ADD HERE NEEDFUL AGRUMENTS '''
             # context = {
             #     'rooms': [],
@@ -150,11 +150,12 @@ def lobby(request, lobby_id):
             #     'user_id': request.user.id
             # }
 
-
+            lobby = Lobby.objects.filter(id=lobby_id)
+            lobby_name = lobby[0].lobby_name
             return render(request, "YoTask/joinRoom.html",
                          {"room_id": room_id,
-                          "pin" : pin})
-
+                          "pin" : pin,
+                          "lobby_name": lobby_name})
 
         # join room
         elif request.POST.get('room_name'):
@@ -188,8 +189,6 @@ def lobby(request, lobby_id):
     }
 
     return render(request, "YoTask/lobby.html", context)
-
-
 
 
 

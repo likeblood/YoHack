@@ -15,7 +15,6 @@ class Task(models.Model):
 
 class Room(models.Model):
     creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="room_creator")
-
     users = models.ManyToManyField(User)
     tasks = models.ManyToManyField(Task)
 
