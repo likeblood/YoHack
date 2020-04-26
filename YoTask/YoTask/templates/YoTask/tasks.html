@@ -1,0 +1,53 @@
+{% extends "YoTask/wrapper.html" %}
+
+{% block content %}
+<div class="modal modal" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered"  role="document">
+        <div class="modal-content p-4" style="background-color: #2C2F33;" >
+            <div class="" id="">
+                <input class="form-control mb-3" id="addTaskName" style="width: 100%;" type="text" placeholder="Заголовок задания">
+                <textarea class="form-control mb-3"  rows="3" id="addTaskDescription" style="width: 100%;" placeholder="Описание задания">
+                    </textarea>
+                <select  class="form-control " style="width: 30%;" id="addTaskAssigne">
+                    <option value="{{user.id}}" selected="selected">{{user.username}} ({{user.telegram}})</span></option>
+                    {% for u in room.users.all %}
+                    {% if user.id != u.id %}
+                        <option value="{{u.id}}">{{u.username}}{{u.telegram}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <div class="text-center">
+                    <button type="button" onclick="addTask()" class="button p-2  text-center" style="background-color: #0fb366; width: 30%; font-size: 16px">
+                        Добавить задание
+                    </button>
+                </div>
+
+            </div>
+            {% load static %}
+            <!--            <img src="{% static 'pics/room.svg' %}" class="mx-auto" style="opacity: 0.8;" width="80%">-->
+        </div>
+    </div>
+
+</div>
+
+<div class="container px-0 py-5" style=" max-width: 1240px; height: 100%">
+    <span class="d-inline py-2 px-4" style="color: #e7e7e7; border-radius: 3px; background-color: #363a3f; ">
+        <a style="color: #6c63ff;" href="/lobby/{{lobby.id}}/">{{lobby.lobby_name}}</a> / {{room.room_name}}</span>
+    <div class="p-4 " style="background-color: #363a3f; border-radius: 4px; height: 95%">
+        <div class="d-flex" style="height: inherit">
+            <div style="width: 75%; height: inherit">
+                <div class="d-flex">
+                    <h2 class="mb-3 mr-4" style="color: #6c63ff;">Задачи</h2>
+                    <span class="link mb-0 mt-2" style=" font-size: 16px" data-toggle="modal" data-target="#addTaskModal">Добавить</span>
+
+                </div>
+                <div class="" id="tasksBlock" style="height: 100%">
+                    {% include "./include/room/tasks.html" %}
+                </div>
+            </div>
+            {% include "./include/room/teammates.html" %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

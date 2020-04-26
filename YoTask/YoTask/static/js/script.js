@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $("input").val("")
-        $("textarea").val("")
+    $("textarea").val("")
 
 })
 
@@ -42,8 +42,8 @@ function addRoom() {
             type: 'POST',
             url: '',
             data: { 'add_room_name': $('#add_room_name').val() ,
-                    'add_room_description':$('#add_room_description').val(),
-                    'add_is_private': $('#add_is_private').is(':checked')},
+                'add_room_description':$('#add_room_description').val(),
+                'add_is_private': $('#add_is_private').is(':checked')},
             success: function (res) {
                 console.log(res)
                 $('#addRoomModal').modal("hide")
@@ -55,18 +55,33 @@ function addRoom() {
 }
 
 function searchRooms() {
-    if($("#searchRooms").val()==""){
-
-    }
     $.ajax({
-            type: 'GET',
+        type: 'GET',
+        url: '',
+        data: {
+            'searchRooms': $("#searchRooms").val() == "" ? "all" : $("#searchRooms").val()
+        },
+        success: function (res) {
+            // console.log(res)
+            $('#roomsBlock').html(res)
+        }
+    });
+}
+
+function addTask() {
+    console.log($("#addTaskAssigne").val())
+    if($("#addTaskAssigne").val()!="" && $("#addTaskName").val()!="" && $("#addTaskDescription").val()!=""){
+
+        $.ajax({
+            type: 'POST',
             url: '',
             data: {
-                'searchRooms': $("#searchRooms").val() == "" ? "all" : $("#searchRooms").val()
+                'asignee': $("#addTaskAssigne").val(), 'task_title':  $("#addTaskName").val(), 'task_description': $("#addTaskDescription").val()
             },
             success: function (res) {
                 // console.log(res)
-                $('#roomsBlock').html(res)
+                $('#tasksBlock').html(res)
             }
-    });
+        });
+    }
 }

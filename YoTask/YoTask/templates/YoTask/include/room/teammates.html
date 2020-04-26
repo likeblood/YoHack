@@ -1,0 +1,20 @@
+<div class="" style="width: 25%">
+                <h2 class="mb-4" style="color: #6c63ff;">Тиммейты</h2>
+                <div class="" style="overflow-y: auto">
+                    {% for u in room.users.all %}
+                    <div class="users py-1 px-2 mb-2">
+                        <div class="d-flex">
+                            <div>
+                                <h5 class="m-0" style="color: #e7e7e7;">{{u.username}}</h5>
+                                <span class="m-0" style="color: #8e8e8e; font-size: 15px">{{u.telegram}}</span>
+                            </div>
+                            <div class="ml-auto">
+                                {% if room.creater == u %}
+                                <span style="color: red">ADMIN</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>

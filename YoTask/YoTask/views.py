@@ -1,11 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from YoTask.models import Lobby, Room, Task
+from usersApp.models import User
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-import datetime
+from datetime import datetime
 import random
 
 ''' registration '''
@@ -197,9 +198,14 @@ def lobby(request, lobby_id):
 
 ''' in-room '''
 
-
+@csrf_exempt
 def issues(request, room_id):
     room = Room.objects.filter(id=room_id).all()
+
+    for i in Lobby.objects.all():
+        if room[0] in i.rooms.all():
+            lobby = i
+
     tasks = Task.objects.filter(room_id=room_id).order_by('date')
 
     if request.method == "POST":
@@ -209,20 +215,23 @@ def issues(request, room_id):
 
             task_title = request.POST['task_title']
             task_description = request.POST['task_description']
-            task_date = datetime().now()
-            asignee = request.POST['asignee']
+            task_date = datetime.now()
+            asignee = User.objects.filter(id=request.POST['asignee']).all()[0]
             is_done = False
             issue = Task(
-                author=request.user.name,
+                author=request.user,
                 task_title=task_title,
                 task_description=task_description,
-                task_date=task_date,
+                date=task_date,
                 is_done=is_done,
-                asignee=asignee
+                asignee=asignee,
+                room_id=room_id
+
             )
-            room.tasks.add(issue)
-            room.save()
+            print(issue)
             issue.save()
+            room[0].tasks.add(issue)
+            room[0].save()
 
         # mark task a done
         elif request.POST.get('issue_id') and \
@@ -231,7 +240,12 @@ def issues(request, room_id):
             task = Task.objects.filter(id=issue_id)[0]
             task.is_done = True
             task.save()
-
+        context = {
+            'tasks': tasks,
+            'room': room[0],
+            'lobby': lobby,
+        }
+        return render(request, "YoTask/include/room/tasks.html", context)
     if request.method == "GET":
         ''' filters '''
         if request.GET.get('date'):
@@ -246,11 +260,12 @@ def issues(request, room_id):
 
     context = {
         'tasks': tasks,
-        'users': room[0].users,
+        'room': room[0],
+        'lobby': lobby,
         'user_id': request.user.id
     }
 
-    render(request, "YoTask/room.html", context)
+    return render(request, "YoTask/tasks.html", context)
 
 
 def about_issue(request, issue_id):
@@ -282,3 +297,5 @@ def todo(request, room_id):
 
     render(request, "YoTask/about_issue.html",
            {'tasks': tasks})
+
+

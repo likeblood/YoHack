@@ -1,0 +1,44 @@
+<div class="d-flex" style="overflow-y: scroll; max-height: 100% ">
+
+    <div class="nav flex-column nav-pills " style="max-width: 100px"  id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <a class="nav-link active"  id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Текущие</a>
+        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Сделано</a>
+        <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Все</a>
+    </div>
+    <div class="tab-content w-100 px-4" id="v-pills-tabContent">
+        <div class="tab-pane fade  show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            {% for task in tasks %}
+            {% if not task.is_done %}
+            <div class="py-2 px-3 mb-2" style="border-radius: 4px; background-color: #44484d; width: 100%" data-toggle="modal" data-target="#taskModal" data-whatever="{{task.task_description}}">
+                <h5 style="color: #e7e7e7" class="m-0">{{task.task_title}}</h5>
+                <span style="font-size:15px; color: #939393">Открыто {{task.author}} {{task.date}}</span>
+                <button  type="button" class="button ml-auto" style="background-color: #0fb366; font-size: 15px">Done</button>
+            </div>
+
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+            {% for task in tasks %}
+            {% if task.is_done %}
+            <div class="py-2 px-3 mb-2" style="border-radius: 4px; background-color: #44484d; width: 100%" data-toggle="modal" data-target="#taskModal" data-whatever="{{task.task_description}}">
+                <h5 style="color: #e7e7e7" class="m-0">{{task.task_title}}</h5>
+                <span style="font-size:15px; color: #939393">Открыто {{task.author}} {{task.date}}</span>
+            </div>
+
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab" data-toggle="modal" data-target="#taskModal" data-whatever="{{task.task_description}}">
+            {% for task in tasks %}
+
+            <div class="py-2 px-3 mb-2" style="border-radius: 4px; background-color: #44484d; width: 100%">
+                <h5 style="color: #e7e7e7" class="m-0">{{task.task_title}}</h5>
+                <span style="font-size:15px; color: #939393">Открыто {{task.author}} {{task.date}}</span>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
