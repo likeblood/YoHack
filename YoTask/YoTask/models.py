@@ -1,10 +1,6 @@
 from django.db import models
 from usersApp.models import User
 
-class Role(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
-    role = models.CharField(max_length = 30)
-
 
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
