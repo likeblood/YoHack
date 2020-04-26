@@ -53,3 +53,20 @@ function addRoom() {
         });
     }
 }
+
+function searchRooms() {
+    if($("#searchRooms").val()==""){
+
+    }
+    $.ajax({
+            type: 'GET',
+            url: '',
+            data: {
+                'searchRooms': $("#searchRooms").val() == "" ? "all" : $("#searchRooms").val()
+            },
+            success: function (res) {
+                // console.log(res)
+                $('#roomsBlock').html(res)
+            }
+    });
+}

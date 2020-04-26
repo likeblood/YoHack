@@ -1,6 +1,6 @@
 <div>
     <nav class="navbar navbar-dark p-0" style="background-color: #23272A; height: 40px" >
-        <div style="position: absolute; left: 0">
+        <div>
             <ul class="nav nav-pills">
                 <button type="button" style="color: #dc3545;" class="btn btn-link" onclick=" relocate_exit()">Выйти</button>
                 <script>
@@ -8,9 +8,8 @@
                          location.href = "/accounts/logout/";
                     }
                 </script>
-            </ul>
         </div>
-        <div style="position: absolute; left:75px">
+        <div>
             <ul class="nav nav-pills">
                 <button type="button" style="color: #6c63ff;" class="btn btn-link" onclick=" relocateto_joinLobby()">Сменить лобби</button>
                 <script>
@@ -18,10 +17,9 @@
                          location.href = "/lobby/";
                     }
                 </script>
-            </ul>
         </div>
         <div class="mx-auto" >
-            <span class="navbar-brand mr-auto" style="color: #e7e7e7;">YoTask
+            <span class="navbar-brand mr-auto" style="color: #e7e7e7; margin-left: -100%">YoTask
             </span>
         </div>
     </nav>
