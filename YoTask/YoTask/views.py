@@ -152,7 +152,7 @@ def join_room(request):
             #     'user_id': request.user.id
             # }
 
-            return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
+            return render(request, "YoTask/joinRoom.html",
                          {"room_id": room_id,
                           "pin" : pin})
 
