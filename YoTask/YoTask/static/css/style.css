@@ -58,9 +58,11 @@ textarea {
     background-color: #2C2F33;
     border-radius: 3px;
     transition: 0.1s;
+    width: calc(25% - 16px);
+    height: 100px;
 }
 .room:hover{
-    border: 1px solid #0fb366;
+    opacity: 1;
 }
 
 .link{

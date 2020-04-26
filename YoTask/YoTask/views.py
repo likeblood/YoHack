@@ -5,12 +5,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 
-
 import datetime
 import random
 
-
 ''' registration '''
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -20,6 +19,7 @@ def index(request):
 
 
 ''' menu '''
+
 
 @csrf_exempt
 def join_lobby(request):
@@ -40,25 +40,25 @@ def join_lobby(request):
                 lobby[0].users.add(request.user)
 
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
-                              { "lobby_id": lobby_id,
-                                "pin": pin})
+                              {"lobby_id": lobby_id,
+                               "pin": pin})
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
-        
+
         # create lobby
         elif request.POST.get('lobby_name'):
 
             # generate and check pin
             chars = 'abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-            pin =''
+            pin = ''
             for i in range(6):
                 pin += random.choice(chars)
 
             try:
                 lobby = Lobby.objects.filter(lobby_password=pin)[0]
                 while lobby.id:
-                    pin =''
+                    pin = ''
                     for i in range(6):
                         pin += random.choice(chars)
                     lobby = Lobby.objects.filter(lobby_password=pin)[0]
@@ -92,71 +92,58 @@ def join_lobby(request):
     return render(request, "YoTask/joinLobby.html")
 
 
-
-
 ''' in-lobby '''
+
 
 @csrf_exempt
 def lobby(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
-    rooms = lobby[0].rooms
+    rooms = lobby[0].rooms.all()
 
     if request.method == "POST":
-        # create room
-        if request.POST.get('room_name') and\
-        request.POST.get('room_description'):
+        if request.POST.get('add_room_name') and \
+                request.POST.get('add_room_description'):
 
             # generate and check pin
             chars = 'abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
-            pin =''
+            pin = ''
             for i in range(6):
                 pin += random.choice(chars)
 
             try:
                 room = Room.objects.filter(room_password=pin)[0]
                 while room.id:
-                    pin =''
+                    pin = ''
                     for i in range(6):
                         pin += random.choice(chars)
                     room = Room.objects.filter(room_password=pin)[0]
             except:
                 pass
 
-            room_name = request.POST['room_name']
-            room_description = request.POST['room_description']
+            room_name = request.POST['add_room_name']
+            room_description = request.POST['add_room_description']
             room_password = pin
-            if request.POST.get('is_private'):
-                is_private = True
-            else:
-                is_private = False
-
+            is_private = False
+            if request.POST.get('add_is_private'):
+                if  request.POST['add_is_private'] == "false":
+                    is_private = True
 
             room = Room(
-                        creater=request.user,
-                        is_private=is_private,
-                        room_name=room_name,
-                        room_description=room_description,
-                        room_password=room_password,
-                        )
+                creater=request.user,
+                is_private=is_private,
+                room_name=room_name,
+                room_description=room_description,
+                room_password=room_password,
+            )
             room.save()
             room.users.add(request.user)
             room.save()
             lobby[0].rooms.add(room)
-            lobby.save()
-            
-            ''' ADD HERE NEEDFUL AGRUMENTS '''
-            # context = {
-            #     'rooms': [],
-            #     'users': room.users,
-            #     'user_id': request.user.id
-            # }
+            lobby[0].save()
 
-            lobby = Lobby.objects.filter(id=lobby_id)
-            lobby_name = lobby[0].lobby_name
-            return render(request, "YoTask/joinRoom.html",
-                         {"room_id": room_id,
-                          "pin" : pin,
-                          "lobby_name": lobby_name})
+            print(lobby[0])
+            return render(request, "YoTask/include/lobby/rooms.html",
+                          {"rooms": lobby[0].rooms.all()})
 
         # join room
         elif request.POST.get('room_name'):
@@ -165,8 +152,8 @@ def lobby(request, lobby_id):
             room.users.add(request.user)
             room.save()
 
-            return render(request,  "YoTask/lobby.html",
-              { "room_id": room.id})
+            return render(request, "YoTask/lobby.html",
+                          {"room_id": room.id})
 
         # join private room with a password
         elif request.POST.get('pin'):
@@ -176,24 +163,23 @@ def lobby(request, lobby_id):
                 room_id = room.id
                 room.add(request.user)
                 room.save()
-                return render(request,  "YoTask/lobby.html",
-                              { "room_id": room_id,
-                                "pin" : pin})
+                return render(request, "YoTask/lobby.html",
+                              {"room_id": room_id,
+                               "pin": pin})
             except:
                 return render(request, "YoTask/lobby.html",
                               {"error": "Мы не нашли комнату с таким пином"})
-
 
     context = {
         'lobby': lobby[0],
         'rooms': rooms,
     }
-
+    print("YESZ2")
     return render(request, "YoTask/lobby.html", context)
 
 
-
 ''' in-room '''
+
 
 def issues(request, room_id):
     room = Room.objects.filter(id=room_id).all()
@@ -201,7 +187,7 @@ def issues(request, room_id):
 
     if request.method == "POST":
         # create task
-        if request.POST.get('asignee') and request.POST.get('task_title')\
+        if request.POST.get('asignee') and request.POST.get('task_title') \
                 and request.POST.get('task_description'):
 
             task_title = request.POST['task_title']
@@ -223,7 +209,7 @@ def issues(request, room_id):
 
         # mark task a done
         elif request.POST.get('issue_id') and \
-             request.POST.get('is_done'):
+                request.POST.get('is_done'):
             issue_id = request.POST['issue_id']
             task = Task.objects.filter(id=issue_id)[0]
             task.is_done = True
@@ -234,13 +220,12 @@ def issues(request, room_id):
         if request.GET.get('date'):
             date = request.GET['date']
             tasks = tasks.order_by('date')
-        if  request.GET.get('author'):
+        if request.GET.get('author'):
             author = request.GET['author']
             tasks = tasks.filter(author=author)
         if request.GET.get('asignee'):
             asignee = request.GET['asignee']
             tasks = tasks.filter(asignee=asignee)
-
 
     context = {
         'tasks': tasks,
@@ -273,19 +258,9 @@ def todo(request, room_id):
         if request.GET.get('date'):
             date = request.GET['date']
             tasks = tasks.order_by('date')
-        if  request.GET.get('author'):
+        if request.GET.get('author'):
             author = request.GET['author']
             tasks = tasks.filter(author=author)
 
-
-    render(request, "YoTask/about_issue.html", 
-            {'tasks' : tasks})
-
-
-
-
-
-
-
-
-
+    render(request, "YoTask/about_issue.html",
+           {'tasks': tasks})
