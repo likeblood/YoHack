@@ -11,6 +11,7 @@ import random
 
 
 ''' registration '''
+
 def index(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect('lobby/')
@@ -19,6 +20,7 @@ def index(request):
 
 
 ''' menu '''
+
 @csrf_exempt
 def join_lobby(request):
     if request.method == "POST":
@@ -107,7 +109,8 @@ def lobby(request, lobby_id):
 @csrf_exempt
 def join_room(request):
     if request.method == "POST":
-        if request.POST.get('room_name') and request.POST.get('room_description'):
+        if request.POST.get('room_name') and\
+        request.POST.get('room_description'):
 
             # generate and check pin
             chars = 'abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
@@ -178,9 +181,11 @@ def join_room(request):
 
 
 ''' in-room '''
+
 def issues(request, room_id):
-    room = lobby.objects.filter(id=room_id).all()
+    room = Room.objects.filter(id=room_id).all()
     tasks = Task.objects.filter(room_id=room_id).order_by('date')
+
     context = {
         'tasks': tasks,
         'users': room.users,
