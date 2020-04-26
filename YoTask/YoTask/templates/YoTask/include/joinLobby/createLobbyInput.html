@@ -1,6 +1,30 @@
-{% if lobby_id  %}
+
+{% if lobby  %}
+<div class="modal modal" id="showPwd" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered"  role="document">
+        <div class="modal-content " style="background-color: #2C2F33;" >
+            <div class="d-flex ">
+                {% load static %}
+                <img src="{% static 'pics/space.svg' %}"  style="opacity: 1;" width="50%">
+                <div class="my-auto ml-3 p-3" id="errorJoinLobbyBlock">
+                    <h1 style="color:  #e7e7e7" class="mb-4">
+                        На не проеби долбаеб
+                    </h1>
+                    <div class="">
+                        <h3 style="color: #6c63ff">{{lobby.lobby_password}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 <script>
-    window.location = '/lobby/' + '{{lobby_id}}' + '/'
+    $("#showPwd").modal("show")
+    $("#showPwd").on('hidden.bs.modal', function () {
+        window.location = '/lobby/' + '{{lobby.id}}' + '/'
+    });
+
 </script>
 {% endif %}
 <input class="form-control-lg mb-3" id="createLobbyInput" style="width: 100%;" type="text" placeholder="Введите название нового лобби">
