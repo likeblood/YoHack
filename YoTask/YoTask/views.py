@@ -1,11 +1,14 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from YoTask.models import Lobby, Room, Task
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
+
 
 import datetime
-import random 
+import random
+
 
 ''' registration '''
 def index(request):
@@ -23,24 +26,35 @@ def join_lobby(request):
         if request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
-                lobby_id = Lobby.objects.filter(lobby_password=pin).id
-                lobby = Lobby.objects.filter(id=lobby_id).all()
+                lobby_id = Lobby.objects.filter(lobby_password=pin)[0].id
+                lobby = Lobby.objects.filter(id=lobby_id)[0]
                 lobby.users.add(request.user)
                 lobby.save()
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
-            return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
+            return HttpResponseRedirect(reverse('lobby', args=[lobby.id]))
 
         elif request.POST.get('lobby_name'):
 
+            # generate and check pin
+            chars = '+-/*!&$#?=@<>abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
+            pin =''
+            for i in range(25):
+                pin += random.choice(chars)
+
             try:
-                max_lobby_password = int(Lobby.objects.order_by("-lobby_password")[0].lobby_password)
+                lobby = Lobby.objects.filter(lobby_password=pin)[0]
+                while lobby.id:
+                    pin =''
+                    for i in range(25):
+                        pin += random.choice(chars)
+                    lobby = Lobby.objects.filter(lobby_password=pin)[0]
             except:
-                max_lobby_password = 999
+                pass
 
             lobby_name = request.POST['lobby_name']
-            lobby_password = max_lobby_password + 1
+            lobby_password = pin
 
             lobby = Lobby(
                 creater=request.user,
@@ -57,19 +71,64 @@ def join_lobby(request):
                 'users': lobby.users,
                 'user_id': request.user.id
             }
+            return HttpResponseRedirect(reverse('lobby', args=[lobby.id]))
+    return render(request, "YoTask/joinLobby.html")
 
-            return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
-    #return HttpResponseRedirect('/lobby/{}/'.format(lobby.id))
 
 
 ''' in-lobby '''
+# @csrf_exempt
+# def create_room(request, lobby_id):
+#     try:
+#         max_room_password = int(Room.objects.order_by("room_password").first()['room_password'])
+#     except:
+#         max_room_password = 0
+
+#     lobby = Lobby.objects.filter(id=lobby_id).all()
+#     if request.method == "POST":
+#         if request.POST.get('room_name') and request.POST.get('room_description')\
+#         and request.POST.get('is_private'):
+#             room_name = request.POST['room_name']
+#             room_description = request.POST['room_description']
+#             is_private = is_private.POST['is_private']
+
+#             if (is_private):
+#                 room_password = [i for i in range(1000, 10000)][max_room_password + 1]
+#             else:
+#                 room_password = None
+
+#             room = Room(
+#                 creater=request.user,
+#                 room_name=room_name,
+#                 room_description=room_description,
+#                 is_private=is_private,
+#                 room_password=room_password
+#             )
+
+            
+#             room.save()
+#             room.users.add(request.user)
+#             lobby.rooms.add(room)
+#             room.save()
+#             lobby.save()
+
+#     context = {
+#         'tasks': [],
+#         'users': room.users,
+#         'user_id': request.user.id
+#     }
+
+#     return render(request, "YoTask/room.html", context)
+
+
 def lobby(request, lobby_id):
-    lobby = Lobby.objects.filter(id=lobby_id).all()
+    lobby = Lobby.objects.filter(id=lobby_id)[0]
+    print(lobby_id)
     rooms = Room.objects.filter(is_private=False)
 
     context = {
         'rooms': rooms,
-        'users': lobby[0].users,
+        'users': lobby.users,
         'user_id': request.user.id
     }
 
@@ -77,23 +136,25 @@ def lobby(request, lobby_id):
 
 
 @csrf_exempt
-def join_room(request):
-        if request.method == "POST":
-            if request.POST.get('pin'):
-                pin = request.POST.get('pin')
-                try:
-                    room_id = Room.objects.filter(room_password=pin).id
-                    room.add(request.user)
-                    room.save()
-                    return HttpResponseRedirect('/room/{}/'.format(room_id))
-                except:
-                    return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
-                                  {"error": "Мы не нашли комнату с таким пином"})
+def join_room(request, room_id):
+        room = lobby.objects.filter(id=room_id).all()
+        if (room.is_private):
+            if request.method == "POST":
+                if request.POST.get('pin'):
+                    pin = request.POST.get('pin')
+                    try:
+                        room_id = Room.objects.filter(room_password=pin).id
+                        room.add(request.user)
+                        room.save()
+                        return HttpResponseRedirect('/room/{}/'.format(room_id))
+                    except:
+                        return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
+                                      {"error": "Мы не нашли комнату с таким пином"})
 
-            else:
-                room.add(request.user)
-                room.save()
-                return HttpResponseRedirect('/room/{}/'.format(room_id))
+        else:
+            room.add(request.user)
+            room.save()
+            return HttpResponseRedirect('/room/{}/'.format(room_id))
 
 
 
