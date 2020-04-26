@@ -32,7 +32,7 @@ def join_lobby(request):
                 lobby.users.add(request.user)
                 lobby.save()
 
-                lobby_id = Lobby.objects.filter(lobby_password=int(pin))[0].id
+                lobby_id = Lobby.objects.filter(lobby_password=pin)[0].id
 
                 lobby = Lobby.objects.filter(id=lobby_id).all()
 
