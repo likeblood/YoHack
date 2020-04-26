@@ -82,7 +82,7 @@ def join_lobby(request):
             # }
 
             return render(request, "YoTask/include/joinLobby/createLobbyInput.html",
-                          {"lobby_id": lobby.id,
+                          {"lobby": lobby,
                            "pin": pin})
 
     return render(request, "YoTask/joinLobby.html")
@@ -94,11 +94,11 @@ def join_lobby(request):
 
 def lobby(request, lobby_id):
     lobby = Lobby.objects.filter(id=lobby_id).all()
-    rooms = Room.objects.filter(is_private=False)
+    rooms = Room.objects.all()
 
     context = {
+        'lobby': lobby[0],
         'rooms': rooms,
-        'users': lobby[0].users,
     }
 
     return render(request, "YoTask/lobby.html", context)
