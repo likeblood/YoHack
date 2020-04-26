@@ -121,7 +121,7 @@ def lobby(request, lobby_id):
             room_password = pin
             is_private = False
             if request.POST.get('add_is_private'):
-                if  request.POST['add_is_private'] == "false":
+                if request.POST['add_is_private'] == "false":
                     is_private = True
 
             room = Room(
@@ -169,11 +169,23 @@ def lobby(request, lobby_id):
                 return render(request, "YoTask/lobby.html",
                               {"error": "Мы не нашли комнату с таким пином"})
 
+    if request.method == "GET":
+        if request.GET.get('searchRooms'):
+            search_rooms = request.GET.get('searchRooms')
+            print(search_rooms)
+            
+            rooms = lobby[0].rooms.all()
+            filtered_rooms = rooms.filter(room_name__contains=search_rooms)
+            print(filtered_rooms)
+            
+            return render(request, "YoTask/lobby.html",
+                          {"rooms": filtered_rooms})
+
+
     context = {
         'lobby': lobby[0],
         'rooms': rooms,
     }
-    print("YESZ2")
     return render(request, "YoTask/lobby.html", context)
 
 
@@ -253,6 +265,7 @@ def todo(request, room_id):
     tasks = Task.objects.filter(asignee=request.user)
 
     if request.method == "GET":
+
         ''' filters '''
         if request.GET.get('date'):
             date = request.GET['date']
