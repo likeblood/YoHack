@@ -1,6 +1,7 @@
 {% extends "YoTask/wrapper.html" %}
 
 {% block content %}
+
 {% load static %}
 {% csrf_token %}
 <!-- Modal -->
@@ -19,11 +20,9 @@
 <div class="modal modal" id="createLobbyModal" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"  role="document">
         <div class="modal-content p-4" style="background-color: #2C2F33;" >
-            <div class="mb-5">
-                <input class="form-control-lg mb-3" id="createLobbyInput" style="width: 100%;" type="text" placeholder="Введите название нового лобби">
-                <button type="button" onclick="createLobby()" class="button p-2 text-center" style="background-color: #0fb366; width: 100%; font-size: 16px">
-                    Создать лобби
-                </button>
+            <div class="mb-5" id="createLobbyBlock">
+                {% include "./include/joinLobby/createLobbyInput.html" %}
+
             </div>
             <img src="{% static 'pics/night.svg' %}"  style="opacity: 0.7;" width="100%">
         </div>

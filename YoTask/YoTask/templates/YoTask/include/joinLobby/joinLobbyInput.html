@@ -1,7 +1,11 @@
-
-    <div id="errorJoinLobby" class="d-none mb-2" style="color: red">{{ error }}</div>
-    <input class="form-control-lg mb-3" id="joinLobbyInput"  style="width: 100%;" type="password" placeholder="Введите пин от лобби">
-    <button type="button" onclick="joinLobby()" class=" button p-2 text-center" style="background-color: #6c63ff; width: 100%; font-size: 16px">
-        Войти в лобби
-    </button>
+{% if lobby_id  %}
+<script>
+    window.location = '/lobby/' + '{{lobby_id}}' + '/'
+</script>
+{% endif %}
+<div id="errorJoinLobby" class="d-none mb-2" style="color: red">{{ error }}</div>
+<input class="form-control-lg mb-3" id="joinLobbyInput"  style="width: 100%;" type="password" placeholder="Введите пин от лобби">
+<button type="button" onclick="joinLobby()" class=" button p-2 text-center" style="background-color: #6c63ff; width: 100%; font-size: 16px">
+    Войти в лобби
+</button>
 

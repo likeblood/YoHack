@@ -5,6 +5,7 @@ function joinLobby() {
             url: '',
             data: { 'pin': $('#joinLobbyInput').val(), },
             success: function (res) {
+                console.log(res)
                 $('#errorJoinLobbyBlock').html(res)
                 $('#errorJoinLobby')[0].classList.remove("d-none")
             }
@@ -20,7 +21,7 @@ function createLobby() {
             url: '',
             data: { 'lobby_name': $('#createLobbyInput').val(), },
             success: function (res) {
-
+                $('#createLobbyBlock').html(res)
             }
 
         });

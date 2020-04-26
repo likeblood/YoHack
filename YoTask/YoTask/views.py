@@ -30,10 +30,19 @@ def join_lobby(request):
                 lobby = Lobby.objects.filter(id=lobby_id)[0]
                 lobby.users.add(request.user)
                 lobby.save()
+                print(pin)
+                lobby_id = Lobby.objects.filter(lobby_password=int(pin))[0].id
+                print(lobby_id)
+                lobby = Lobby.objects.filter(id=lobby_id).all()
+                print(lobby)
+                lobby[0].users.add(request.user)
+                print(lobby[0].users.all())
+                print(lobby[0].users.all())
+                return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
+                              {"lobby_id": lobby_id})
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
-            return HttpResponseRedirect(reverse('lobby', args=[lobby.id]))
 
         elif request.POST.get('lobby_name'):
 
@@ -71,9 +80,10 @@ def join_lobby(request):
                 'users': lobby.users,
                 'user_id': request.user.id
             }
-            return HttpResponseRedirect(reverse('lobby', args=[lobby.id]))
+            print(lobby.id)
+            return render(request, "YoTask/include/joinLobby/createLobbyInput.html",
+                          {"lobby_id": lobby.id})
     return render(request, "YoTask/joinLobby.html")
-
 
 
 ''' in-lobby '''
@@ -122,14 +132,13 @@ def join_lobby(request):
 
 
 def lobby(request, lobby_id):
-    lobby = Lobby.objects.filter(id=lobby_id)[0]
     print(lobby_id)
+    lobby = Lobby.objects.filter(id=lobby_id).all()
     rooms = Room.objects.filter(is_private=False)
 
     context = {
         'rooms': rooms,
-        'users': lobby.users,
-        'user_id': request.user.id
+        'users': lobby[0].users,
     }
 
     return render(request, "YoTask/lobby.html", context)

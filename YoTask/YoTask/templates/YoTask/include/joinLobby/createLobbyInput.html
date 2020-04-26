@@ -1,0 +1,9 @@
+{% if lobby_id  %}
+<script>
+    window.location = '/lobby/' + '{{lobby_id}}' + '/'
+</script>
+{% endif %}
+<input class="form-control-lg mb-3" id="createLobbyInput" style="width: 100%;" type="text" placeholder="Введите название нового лобби">
+<button type="button" onclick="createLobby()" class="button p-2 text-center" style="background-color: #0fb366; width: 100%; font-size: 16px">
+    Создать лобби
+</button>
