@@ -36,9 +36,25 @@
                     {% include "./include/lobby/rooms.html" %}
                 </div>
             </div>
-            <div style="width: 25%">
+            <div class="" style="width: 25%">
                 <h2 class="mb-3" style="color: #6c63ff;">Участники</h2>
-
+                <div class="p-2" style="overflow-y: auto">
+                    {% for u in lobby.users.all %}
+                    <div class="users py-1 px-2 mb-2">
+                        <div class="d-flex">
+                            <div>
+                                <h5 class="m-0" style="color: #e7e7e7;">{{u.username}}</h5>
+                                <span class="m-0" style="color: #8e8e8e; font-size: 15px">{{u.telegram}}</span>
+                            </div>
+                            <div class="ml-auto">
+                                {% if lobby.creater == u %}
+                                <span style="color: red">ADMIN</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
