@@ -28,21 +28,15 @@ def join_lobby(request):
         if request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
-                lobby_id = Lobby.objects.filter(lobby_password=pin)[0].id
-                lobby = Lobby.objects.filter(id=lobby_id)[0]
+                lobby = Lobby.objects.filter(lobby_password=pin)[0]
+
                 lobby.users.add(request.user)
-                role = Role(request.user, 'участник')
-                lobby.roles.add(role)
+
                 lobby.save()
 
-                lobby_id = Lobby.objects.filter(lobby_password=pin)[0].id
-
-                lobby = Lobby.objects.filter(id=lobby_id).all()
-
-                lobby[0].users.add(request.user)
 
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
-                              {"lobby_id": lobby_id,
+                              {"lobby_id": lobby.id,
                                "pin": pin})
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
@@ -77,8 +71,7 @@ def join_lobby(request):
 
             lobby.save()
             lobby.users.add(request.user)
-            role = Role(request.user, 'администратор')
-            lobby.roles.add(role)
+
             lobby.save()
 
             ''' ADD HERE NEEDFUL AGRUMENTS '''
@@ -128,7 +121,7 @@ def lobby(request, lobby_id):
             room_password = pin
             is_private = False
             if request.POST.get('add_is_private'):
-                if  request.POST['add_is_private'] == "false":
+                if request.POST['add_is_private'] == "false":
                     is_private = True
 
             room = Room(
@@ -147,7 +140,7 @@ def lobby(request, lobby_id):
             print(lobby[0])
             return render(request, "YoTask/include/lobby/rooms.html",
                           {"rooms": lobby[0].rooms.all(),
-                           "roles": lobby[0].roles.all()})
+                           })
 
         # join room
         elif request.POST.get('room_name'):
@@ -158,7 +151,7 @@ def lobby(request, lobby_id):
 
             return render(request, "YoTask/lobby.html",
                           {"room_id": room.id,
-                           "roles": lobby[0].roles.all()})
+                           })
 
         # join private room with a password
         elif request.POST.get('pin'):
@@ -171,16 +164,28 @@ def lobby(request, lobby_id):
                 return render(request, "YoTask/lobby.html",
                               {"room_id": room_id,
                                "pin": pin,
-                               "roles": lobby[0].roles.all()})
+                               })
             except:
                 return render(request, "YoTask/lobby.html",
                               {"error": "Мы не нашли комнату с таким пином"})
+
+    if request.method == "GET":
+        if request.GET.get('searchRooms'):
+            search_rooms = request.GET.get('searchRooms')
+            print(search_rooms)
+            
+            rooms = lobby[0].rooms.all()
+            filtered_rooms = rooms.filter(room_name__contains=search_rooms)
+            print(filtered_rooms)
+            
+            return render(request, "YoTask/lobby.html",
+                          {"rooms": filtered_rooms})
+
 
     context = {
         'lobby': lobby[0],
         'rooms': rooms,
     }
-    print("YESZ2")
     return render(request, "YoTask/lobby.html", context)
 
 
@@ -260,6 +265,7 @@ def todo(request, room_id):
     tasks = Task.objects.filter(asignee=request.user)
 
     if request.method == "GET":
+
         ''' filters '''
         if request.GET.get('date'):
             date = request.GET['date']
