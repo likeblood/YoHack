@@ -211,6 +211,7 @@ def issues(request, room_id):
             issue_id = request.POST['issue_id']
             task = Task.objects.filter(id=issue_id)[0]
             task.is_done = True
+            task.save()
 
 
     context = {
@@ -221,8 +222,10 @@ def issues(request, room_id):
 
     render(request, "YoTask/room.html", context)
 
+
 def about_issue(request, issue_id):
-    issue = Task.objects.filter(id=issue_id)
+    issue = Task.objects.filter(id=issue_id)[0]
+
     context = {
         'author': issue.author,
         'asignee': issue.asignee,
@@ -232,5 +235,19 @@ def about_issue(request, issue_id):
     }
 
     render(request, "YoTask/about_issue.html", context)
+
+
+def todo(request, room_id):
+    tasks = Task.objects.filter(asignee=request.user)
+
+    render(request, "YoTask/about_issue.html", 
+            {'tasks' : tasks})
+
+
+
+
+
+
+
 
 
