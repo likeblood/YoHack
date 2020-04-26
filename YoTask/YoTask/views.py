@@ -24,6 +24,7 @@ def index(request):
 @csrf_exempt
 def join_lobby(request):
     if request.method == "POST":
+        # join lobby with a password
         if request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
@@ -45,6 +46,7 @@ def join_lobby(request):
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
         
+        # create lobby
         elif request.POST.get('lobby_name'):
 
             # generate and check pin
@@ -109,6 +111,7 @@ def lobby(request, lobby_id):
 @csrf_exempt
 def join_room(request):
     if request.method == "POST":
+        # create room
         if request.POST.get('room_name') and\
         request.POST.get('room_description'):
 
@@ -153,6 +156,7 @@ def join_room(request):
                          {"room_id": room_id,
                           "pin" : pin})
 
+        # join room
         elif request.POST.get('room_name'):
             room_name = request.POST['room_name']
             room = Room.objects.filter(room_name=room_name)[0]
@@ -162,6 +166,7 @@ def join_room(request):
             return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
               { "room_id": room.id})
 
+        # join private room with a password
         elif request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
@@ -187,6 +192,7 @@ def issues(request, room_id):
     tasks = Task.objects.filter(room_id=room_id).order_by('date')
 
     if request.method == "POST":
+        # create task
         if request.POST.get('asignee') and request.POST.get('task_title')\
                 and request.POST.get('task_description'):
 
@@ -207,13 +213,16 @@ def issues(request, room_id):
             room.save()
             issue.save()
 
+        # mark task a done
         elif request.POST.get('issue_id') and \
              request.POST.get('is_done'):
             issue_id = request.POST['issue_id']
             task = Task.objects.filter(id=issue_id)[0]
             task.is_done = True
             task.save()
+
     if request.method == "GET":
+        ''' filters '''
         if request.GET.get('date'):
             date = request.GET['date']
             tasks = tasks.order_by('date')
@@ -252,6 +261,7 @@ def todo(request, room_id):
     tasks = Task.objects.filter(asignee=request.user)
 
     if request.method == "GET":
+        ''' filters '''
         if request.GET.get('date'):
             date = request.GET['date']
             tasks = tasks.order_by('date')

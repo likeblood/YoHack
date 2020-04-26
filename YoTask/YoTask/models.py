@@ -1,6 +1,7 @@
 from django.db import models
 from usersApp.models import User
 
+
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
     asignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="asignee")
