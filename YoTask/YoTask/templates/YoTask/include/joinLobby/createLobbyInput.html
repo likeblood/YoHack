@@ -10,8 +10,9 @@
                     <h1 style="color:  #e7e7e7" class="mb-4">
                         На не проеби долбаеб
                     </h1>
-                    <div class="">
+                    <div class="d-flex">
                         <h3 style="color: #6c63ff">{{lobby.lobby_password}}</h3>
+                        <a href="/lobby/{{lobby.id}}/"><h3 class="ml-4" style="color: #c91c3b;">ОК</h3></a>
                     </div>
                 </div>
             </div>
@@ -21,10 +22,6 @@
 </div>
 <script>
     $("#showPwd").modal("show")
-    $("#showPwd").on('hidden.bs.modal', function () {
-        window.location = '/lobby/' + '{{lobby.id}}' + '/'
-    });
-
 </script>
 {% endif %}
 <input class="form-control-lg mb-3" id="createLobbyInput" style="width: 100%;" type="text" placeholder="Введите название нового лобби">
