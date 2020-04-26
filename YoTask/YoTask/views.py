@@ -171,15 +171,21 @@ def lobby(request, lobby_id):
 
     if request.method == "GET":
         if request.GET.get('searchRooms'):
-            search_rooms = request.GET.get('searchRooms')
-            print(search_rooms)
-            
-            rooms = lobby[0].rooms.all()
-            filtered_rooms = rooms.filter(room_name__contains=search_rooms)
-            print(filtered_rooms)
-            
-            return render(request, "YoTask/lobby.html",
-                          {"rooms": filtered_rooms})
+            if request.GET.get('searchRooms')=="all":
+                return render(request, "YoTask/include/lobby/rooms.html",
+                          {"rooms": lobby[0].rooms.all()})
+            else:
+                search_rooms = request.GET.get('searchRooms')
+
+                print(search_rooms)
+
+                rooms = lobby[0].rooms.all()
+                filtered_rooms = rooms.filter(room_name__contains=search_rooms)
+                print(filtered_rooms)
+
+                return render(request, "YoTask/include/lobby/rooms.html",
+                              {"rooms": filtered_rooms})
+
 
 
     context = {
@@ -240,7 +246,7 @@ def issues(request, room_id):
 
     context = {
         'tasks': tasks,
-        'users': room.users,
+        'users': room[0].users,
         'user_id': request.user.id
     }
 
