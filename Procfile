@@ -1,1 +1,1 @@
-web: gunicorn YoTask.wsgi --log-file -
+web: gunicorn YoTask.wsgi.application --log-file -
