@@ -1,3 +1,7 @@
+$(document).ready(function () {
+    $("#txtarea").val("")
+})
+
 function joinLobby() {
     if($('#joinLobbyInput').val()){
         $.ajax({
