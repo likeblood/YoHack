@@ -31,6 +31,8 @@ def join_lobby(request):
                 lobby_id = Lobby.objects.filter(lobby_password=pin)[0].id
                 lobby = Lobby.objects.filter(id=lobby_id)[0]
                 lobby.users.add(request.user)
+                role = Role(request.user, 'участник')
+                lobby.roles.add(role)
                 lobby.save()
 
                 lobby_id = Lobby.objects.filter(lobby_password=pin)[0].id
@@ -67,7 +69,6 @@ def join_lobby(request):
 
             lobby_name = request.POST['lobby_name']
             lobby_password = pin
-
             lobby = Lobby(
                 creater=request.user,
                 lobby_name=lobby_name,
@@ -76,6 +77,8 @@ def join_lobby(request):
 
             lobby.save()
             lobby.users.add(request.user)
+            role = Role(request.user, 'администратор')
+            lobby.roles.add(role)
             lobby.save()
 
             ''' ADD HERE NEEDFUL AGRUMENTS '''
@@ -143,7 +146,8 @@ def lobby(request, lobby_id):
 
             print(lobby[0])
             return render(request, "YoTask/include/lobby/rooms.html",
-                          {"rooms": lobby[0].rooms.all()})
+                          {"rooms": lobby[0].rooms.all(),
+                           "roles": lobby[0].roles.all()})
 
         # join room
         elif request.POST.get('room_name'):
@@ -153,7 +157,8 @@ def lobby(request, lobby_id):
             room.save()
 
             return render(request, "YoTask/lobby.html",
-                          {"room_id": room.id})
+                          {"room_id": room.id,
+                           "roles": lobby[0].roles.all()})
 
         # join private room with a password
         elif request.POST.get('pin'):
@@ -165,7 +170,8 @@ def lobby(request, lobby_id):
                 room.save()
                 return render(request, "YoTask/lobby.html",
                               {"room_id": room_id,
-                               "pin": pin})
+                               "pin": pin,
+                               "roles": lobby[0].roles.all()})
             except:
                 return render(request, "YoTask/lobby.html",
                               {"error": "Мы не нашли комнату с таким пином"})
