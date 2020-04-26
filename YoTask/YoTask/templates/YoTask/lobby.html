@@ -1,0 +1,62 @@
+{% extends "YoTask/wrapper.html" %}
+
+{% block content %}
+<div class="modal modal" id="addRoomModal" tabindex="-1" role="dialog" aria-labelledby="..." aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"  role="document">
+        <div class="modal-content p-4" style="background-color: #2C2F33;" >
+            <div class="mb-5" id="">
+
+                <input class="form-control-lg mb-3" id="add_room_name" style="width: 100%;" type="text" placeholder="Введите название новой комнаты">
+                <textarea class="form-control-lg mb-3"  id="add_room_description" style="width: 100%;" placeholder="Описание новой комнаты">
+                    </textarea>
+                <input type="checkbox"  style="transform: scale(1.5); " class=" mb-4" id="add_is_private" value="private"><span class="ml-3" style="font-size: 16px;color: #e7e7e7">Приватная комната</span>
+                <button type="button" onclick="addRoom()" class="button p-2 text-center" style="background-color: #0fb366; width: 100%; font-size: 16px">
+                    Создать комнату
+                </button>
+
+            </div>
+            {% load static %}
+            <img src="{% static 'pics/room.svg' %}" class="mx-auto" style="opacity: 0.8;" width="80%">
+        </div>
+    </div>
+
+</div>
+
+<div class="container px-0 py-5" style=" max-width: 1240px; height: 100%">
+    <h5 class="d-inline py-2 px-4" style="color: #e7e7e7; border-radius: 3px; background-color: #363a3f; ">
+        #{{lobby.lobby_name}}</h5>
+    <div class="p-4 " style="background-color: #363a3f; border-radius: 4px; height: 95%">
+        <div class="d-flex" style="height: inherit">
+            <div style="width: 75%; height: inherit">
+                <div class="d-flex">
+                    <h2 class="mb-3 mr-4" style="color: #6c63ff;">Комнаты</h2>
+                    <span class="link mb-0 mt-2" style=" font-size: 16px" data-toggle="modal" data-target="#addRoomModal">Добавить</span>
+                </div>
+                <div class="" id="roomsBlock" style="height: 100%">
+                    {% include "./include/lobby/rooms.html" %}
+                </div>
+            </div>
+            <div class="" style="width: 25%">
+                <h2 class="mb-3" style="color: #6c63ff;">Участники</h2>
+                <div class="p-2" style="overflow-y: auto">
+                    {% for u in lobby.users.all %}
+                    <div class="users py-1 px-2 mb-2">
+                        <div class="d-flex">
+                            <div>
+                                <h5 class="m-0" style="color: #e7e7e7;">{{u.username}}</h5>
+                                <span class="m-0" style="color: #8e8e8e; font-size: 15px">{{u.telegram}}</span>
+                            </div>
+                            <div class="ml-auto">
+                                {% if lobby.creater == u %}
+                                <span style="color: red">ADMIN</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

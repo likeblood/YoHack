@@ -1,0 +1,25 @@
+
+
+<div class="d-flex " style="max-height: 100%; flex-flow: row wrap; overflow-y: auto">
+    {% for room in rooms %}
+    {% if  room.is_private %}
+    <div class="room mr-3 mb-3 cp p-2">
+        <div onclick="window.location = '/room/{{room.id}}/issues/'">
+            <h5 style="color: #e7e7e7; white-space: nowrap; overflow: hidden;">{{room.room_name}}</h5>
+            <div style="color: #6c63ff;">
+                <span class="far fa-user"></span>
+                <span>{{room.users.count}}</span>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="room mr-3 mb-3 cp p-2">
+        <div class="d-flex">
+            <h5 style="color: #e7e7e7; white-space: nowrap; overflow: hidden;">{{room.room_name}}</h5>
+            <span class="mb-0 ml-2 fa fa-lock" style="color: #1b1e21"></span>
+        </div>
+
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>

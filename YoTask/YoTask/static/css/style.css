@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,500,600&display=swap');
+
+html, body{
+    background-color: #2C2F33;
+    height: 100%;
+    margin: 0;
+    font-family: "Rubik";
+}
+
+html {
+    height: 100%;
+}
+
+.navbar-brand{
+    font-family: "Rubik";
+    font-weight: 600;
+}
+
+.mFont{
+    font-family: "Rubik";
+    font-size: 1.5em;
+    color: #e7e7e7;
+    font-weight: 500;
+}
+
+.button{
+    color: white;
+    border: unset;
+    border-radius: 3px;
+    font-size: 18px;
+    transition: 0.1s;
+}
+
+.button:hover{
+    opacity: 0.8;
+}
+
+input, textarea {
+    border: none !important;
+    color: rgba(255, 255, 255, 0.35) !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+}
+
+textarea {
+    height:calc(1.5em + .75rem + 2px);
+    padding:.375rem .75rem;font-size:1rem;
+    line-height:1.5;
+    background-clip:padding-box;
+    border-radius:.25rem;
+}
+
+.cp {
+    cursor: pointer;
+}
+
+.room {
+    opacity: 0.8;
+    background-color: #2C2F33;
+    border-radius: 3px;
+    transition: 0.1s;
+    width: calc(25% - 16px);
+    height: 145px;
+}
+.room:hover{
+    opacity: 1;
+}
+
+.link{
+    cursor: pointer;
+    color: #8e8e8e;
+}
+.link:hover{
+    color: #0fb366;
+}
+
+.users{
+    border-radius: 3px;
+    cursor: pointer;
+}
+.users:hover{
+    background-color: rgba(255, 255, 255, 0.07);
+}
