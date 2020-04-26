@@ -207,11 +207,22 @@ def issues(request, room_id):
             room.save()
             issue.save()
 
-        elif request.POST.get('issue_id') and request.POST.get('is_done'):
+        elif request.POST.get('issue_id') and \
+             request.POST.get('is_done'):
             issue_id = request.POST['issue_id']
             task = Task.objects.filter(id=issue_id)[0]
             task.is_done = True
             task.save()
+    if request.method == "GET":
+        if request.GET.get('date'):
+            date = request.GET['date']
+            tasks = tasks.order_by('date')
+        if  request.GET.get('author'):
+            author = request.GET['author']
+            tasks = tasks.filter(author=author)
+        if request.GET.get('asignee'):
+            asignee = request.GET['asignee']
+            tasks = tasks.filter(asignee=asignee)
 
 
     context = {
@@ -239,6 +250,15 @@ def about_issue(request, issue_id):
 
 def todo(request, room_id):
     tasks = Task.objects.filter(asignee=request.user)
+
+    if request.method == "GET":
+        if request.GET.get('date'):
+            date = request.GET['date']
+            tasks = tasks.order_by('date')
+        if  request.GET.get('author'):
+            author = request.GET['author']
+            tasks = tasks.filter(author=author)
+
 
     render(request, "YoTask/about_issue.html", 
             {'tasks' : tasks})
