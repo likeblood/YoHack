@@ -143,6 +143,7 @@ def lobby(request, lobby_id):
             room.save()
             lobby[0].rooms.add(room)
             lobby.save()
+            
             ''' ADD HERE NEEDFUL AGRUMENTS '''
             # context = {
             #     'rooms': [],
