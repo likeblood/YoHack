@@ -186,22 +186,10 @@ def issues(request, room_id):
     room = Room.objects.filter(id=room_id).all()
     tasks = Task.objects.filter(room_id=room_id).order_by('date')
 
-    context = {
-        'tasks': tasks,
-        'users': room.users,
-        'user_id': request.user.id
-    }
-
-    render(request, "YoTask/room.html", context)
-
-
-@csrf_exempt
-def create_issue(request, lobby_id, room_id):
-    lobby = Lobby.objects.filter(id=lobby_id).all()
-    room = lobby.objects.filter(id=room_id).all()
     if request.method == "POST":
-        if request.POST.get('asignee') and request.POST.get('task_title') \
+        if request.POST.get('asignee') and request.POST.get('task_title')\
                 and request.POST.get('task_description'):
+
             task_title = request.POST['task_title']
             task_description = request.POST['task_description']
             task_date = datetime().now()
@@ -216,17 +204,22 @@ def create_issue(request, lobby_id, room_id):
                 asignee=asignee
             )
             room.tasks.add(issue)
-    room.save()
-    issue.save()
+            room.save()
+            issue.save()
+
+        elif request.POST.get('issue_id') and request.POST.get('is_done'):
+            issue_id = request.POST['issue_id']
+            task = Task.objects.filter(id=issue_id)[0]
+            task.is_done = True
+
 
     context = {
-        'tasks': room.tasks,
+        'tasks': tasks,
         'users': room.users,
         'user_id': request.user.id
     }
 
     render(request, "YoTask/room.html", context)
-
 
 def about_issue(request, issue_id):
     issue = Task.objects.filter(id=issue_id)

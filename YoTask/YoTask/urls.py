@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^lobby/(\d+)/$', views.lobby, name='lobby'),                              # lobby
     url(r'^room/(\d+)/issues/$', views.issues, name='issues'),                      # room issues
     url(r'^room/(\d+)/issues/(\d+)/$', views.about_issue, name='about_issue'),      # about issue
-    # url(r'^room/(\d+)/todo/$', views.todo, name='todo'),                          # user's todo
+    url(r'^room/(\d+)/todo/$', views.todo, name='todo'),                          # user's todo
 ]
