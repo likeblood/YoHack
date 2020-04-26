@@ -19,7 +19,6 @@ def index(request):
 
 
 ''' menu '''
-
 @csrf_exempt
 def join_lobby(request):
     if request.method == "POST":
@@ -43,6 +42,7 @@ def join_lobby(request):
             except:
                 return render(request, "YoTask/include/joinLobby/joinLobbyInput.html",
                               {"error": "Мы не нашли лобби с таким пином"})
+        
         elif request.POST.get('lobby_name'):
 
             # generate and check pin
@@ -84,12 +84,15 @@ def join_lobby(request):
             return render(request, "YoTask/include/joinLobby/createLobbyInput.html",
                           {"lobby_id": lobby.id,
                            "pin": pin})
+
     return render(request, "YoTask/joinLobby.html")
 
 
+
+
 ''' in-lobby '''
+
 def lobby(request, lobby_id):
-    print(lobby_id)
     lobby = Lobby.objects.filter(id=lobby_id).all()
     rooms = Room.objects.filter(is_private=False)
 
@@ -101,6 +104,7 @@ def lobby(request, lobby_id):
     return render(request, "YoTask/lobby.html", context)
 
 
+@csrf_exempt
 def join_room(request):
     if request.method == "POST":
         if request.POST.get('room_name') and request.POST.get('room_description'):
@@ -142,12 +146,19 @@ def join_room(request):
             #     'user_id': request.user.id
             # }
 
+            return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
+                         {"room_id": room_id,
+                          "pin" : pin})
+
         elif request.POST.get('room_name'):
             room_name = request.POST['room_name']
             room = Room.objects.filter(room_name=room_name)[0]
             room.users.add(request.user)
             room.save()
-        
+
+            return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
+              { "room_id": room.id})
+
         elif request.POST.get('pin'):
             pin = request.POST.get('pin')
             try:
@@ -161,70 +172,8 @@ def join_room(request):
             except:
                 return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
                               {"error": "Мы не нашли комнату с таким пином"})
+
     return render(request, "YoTask/joinRoom.html")
-
-@csrf_exempt
-def create_room(request, lobby_id):
-    try:
-        max_room_password = int(Room.objects.order_by("room_password").first()['room_password'])
-    except:
-        max_room_password = 0
-
-    lobby = Lobby.objects.filter(id=lobby_id).all()
-    if request.method == "POST":
-        if request.POST.get('room_name') and request.POST.get('room_description')\
-        and request.POST.get('is_private'):
-            room_name = request.POST['room_name']
-            room_description = request.POST['room_description']
-            is_private = is_private.POST['is_private']
-
-            if (is_private):
-                room_password = [i for i in range(1000, 10000)][max_room_password + 1]
-            else:
-                room_password = None
-
-            room = Room(
-                creater=request.user,
-                room_name=room_name,
-                room_description=room_description,
-                is_private=is_private,
-                room_password=room_password
-            )
-
-            
-            room.save()
-            room.users.add(request.user)
-            lobby.rooms.add(room)
-            room.save()
-            lobby.save()
-
-    context = {
-        'tasks': [],
-        'users': room.users,
-        'user_id': request.user.id
-    }
-
-    return render(request, "YoTask/room.html", context)
-
-@csrf_exempt
-def join_room(request, room_id):
-        room = lobby.objects.filter(id=room_id).all()
-        if request.method == "POST":
-            if request.POST.get('pin'):
-                pin = request.POST.get('pin')
-                try:
-                    room_id = Room.objects.filter(room_password=pin).id
-                    room.add(request.user)
-                    room.save()
-                    return HttpResponseRedirect('/room/{}/'.format(room_id))
-                except:
-                    return render(request, "YoTask/include/joinRoom/joinRoomInput.html",
-                                  {"error": "Мы не нашли комнату с таким пином"})
-
-        else:
-            room.add(request.user)
-            room.save()
-            return HttpResponseRedirect('/room/{}/'.format(room_id))
 
 
 
