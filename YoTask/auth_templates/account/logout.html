@@ -15,7 +15,14 @@
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
-    <button type="submit" class="btn btn-danger">{% trans 'Выйти' %}</button>
+
+    <button type="submit" class="btn" style="background-color: #dc3545; color: #e7e7e7">{% trans 'Выйти' %}</button>
+    <button type="button" class="btn" onclick="relocate_back()" style="background-color: #0fb366; color: #e7e7e7">{% trans 'Вернуться назад' %}</button>
+    <script>
+      function relocate_back() {
+        location.href = "/lobby/";
+      }
+    </script>
   </form>
 </div>
 
