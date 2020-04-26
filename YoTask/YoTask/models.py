@@ -1,10 +1,6 @@
 from django.db import models
 from usersApp.models import User
 
-class Role(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user")
-    role = models.CharField(max_length = 30)
-
 
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="author")
@@ -34,7 +30,6 @@ class Room(models.Model):
 class Lobby(models.Model):
     creater = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lobby_creator")
     users = models.ManyToManyField(User, related_name="lobby_users")
-    # roles = models.ManyToManyField(Role, related_name="roles")
     rooms = models.ManyToManyField(Room)
 
     lobby_name = models.CharField(max_length=30)
